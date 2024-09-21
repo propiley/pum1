@@ -4,23 +4,27 @@ const progressBar = document.getElementById('progress-bar');
 const prizeMessage = document.getElementById('prize-message');
 const recordScoreButton = document.getElementById('record-score');
 const playAgainButton = document.getElementById('play-again');
+const timerDisplay = document.getElementById('timer');
 let score = 0;
 let clickedPumpkins = 0;
 let intervalTime = 10000;
+let timeLeft = intervalTime / 1000;
 
-const eyesImages = [
-    'eyes1.png',
-    'eyes2.png',
-    'eyes3.png'
-];
-
-const bodyImages = [
-    'body1.png',
-    'body2.png',
-    'body3.png'
+const pumpkinImages = [
+    'pumpkin1.gif',
+    'pumpkin2.gif',
+    'pumpkin3.gif'
 ];
 
 const explosionImage = 'explosion.png';
+
+function updateTimer() {
+    timeLeft--;
+    timerDisplay.textContent = `Time left: ${timeLeft}s`;
+    if (timeLeft <= 0) {
+        timeLeft = intervalTime / 1000;
+    }
+}
 
 function generateBoard() {
     gameBoard.innerHTML = '';
@@ -32,19 +36,13 @@ function generateBoard() {
         const pumpkin = document.createElement('div');
         pumpkin.classList.add('pumpkin');
         
-        const randomEyes = eyesImages[Math.floor(Math.random() * eyesImages.length)];
-        const randomBody = bodyImages[Math.floor(Math.random() * bodyImages.length)];
+        const randomPumpkin = pumpkinImages[Math.floor(Math.random() * pumpkinImages.length)];
         
         const pumpkinBody = document.createElement('div');
         pumpkinBody.classList.add('pumpkin-body');
-        pumpkinBody.style.backgroundImage = `url('${randomBody}')`;
-        
-        const pumpkinEyes = document.createElement('div');
-        pumpkinEyes.classList.add('pumpkin-eyes');
-        pumpkinEyes.style.backgroundImage = `url('${randomEyes}')`;
+        pumpkinBody.style.backgroundImage = `url('${randomPumpkin}')`;
         
         pumpkin.appendChild(pumpkinBody);
-        pumpkin.appendChild(pumpkinEyes);
         
         if (i === uniquePumpkinIndex) {
             pumpkin.dataset.points = 10;
@@ -58,7 +56,6 @@ function generateBoard() {
                 scoreDisplay.textContent = `Score: ${score}`;
                 pumpkin.classList.add('clicked');
                 pumpkinBody.style.backgroundImage = `url('${explosionImage}')`;
-                pumpkinEyes.style.backgroundImage = 'none';
                 clickedPumpkins++;
                 progressBar.style.width = `${(clickedPumpkins / 25) * 100}%`;
                 if (clickedPumpkins === 25) {
@@ -72,7 +69,12 @@ function generateBoard() {
     }
 }
 
-let gameInterval = setInterval(generateBoard, intervalTime);
+let gameInterval = setInterval(() => {
+    generateBoard();
+    timeLeft = intervalTime / 1000;
+}, intervalTime);
+
+setInterval(updateTimer, 1000);
 
 recordScoreButton.addEventListener('click', () => {
     const nickname = prompt('Enter your nickname:');
@@ -83,7 +85,10 @@ recordScoreButton.addEventListener('click', () => {
 
 playAgainButton.addEventListener('click', () => {
     intervalTime -= 1000;
-    gameInterval = setInterval(generateBoard, intervalTime);
+    gameInterval = setInterval(() => {
+        generateBoard();
+        timeLeft = intervalTime / 1000;
+    }, intervalTime);
     generateBoard();
 });
 
