@@ -23,6 +23,7 @@ function updateTimer() {
     timerDisplay.textContent = `Time left: ${timeLeft}s`;
     if (timeLeft <= 0) {
         timeLeft = intervalTime / 1000;
+        generateBoard(); // Пересоздаем игровое поле
     }
 }
 
@@ -74,7 +75,7 @@ let gameInterval = setInterval(() => {
     timeLeft = intervalTime / 1000;
 }, intervalTime);
 
-setInterval(updateTimer, 1000);
+let timerInterval = setInterval(updateTimer, 1000);
 
 recordScoreButton.addEventListener('click', () => {
     const nickname = prompt('Enter your nickname:');
