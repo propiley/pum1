@@ -16,6 +16,8 @@ body {
     display: grid;
     grid-template-columns: repeat(5, 100px);
     grid-gap: 10px;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .pumpkin {
@@ -76,7 +78,34 @@ button {
 }
 
 @media (max-width: 600px) {
+    #game-board {
+        grid-template-columns: repeat(5, 1fr);
+        grid-gap: 5px;
+    }
+
+    .pumpkin {
+        width: 60px;
+        height: 60px;
+    }
+
     #progress-container {
         width: 100%;
+    }
+
+    #progress-bar {
+        height: 20px;
+    }
+
+    #score {
+        font-size: 18px;
+    }
+
+    #prize-message {
+        font-size: 18px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 8px 16px;
     }
 }
